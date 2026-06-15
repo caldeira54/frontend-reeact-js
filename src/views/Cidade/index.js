@@ -27,7 +27,44 @@ export default function Cidade() {
     }, []);
 
     const salvar = async (e) => {
-        
+        try {
+            const cidade = {nome, uf};
+            if (idEdicao) {
+                await api.put(
+                    `/cidade/${idEdicao}`,
+                    cidade
+                );
+            } else {
+                await api.post("/cidade",
+                    cidade
+                );
+            }
+            limparFormulario();
+            carregarCidades();
+        } catch(error) {
+            console.error("Erro ao carregar cidades", error);
+        }
+    }
+
+    const limparFormulario = () => {
+        setIdEdicao(null);
+        setNome("");
+        setUf("");
+    }
+
+    const editar = (cidade) => {
+        setIdEdicao(cidade.id);
+        setNome(cidade.nome);
+        setUf(cidade.uf);
+    }
+
+    const excluir = async (id) => {
+        try {
+            await api.delete(`/cidade/${id}`);
+            carregarCidades();
+        } catch(error) {
+            console.error("Erro ao excluir cidade", error);
+        }
     }
 
     return (
@@ -35,7 +72,7 @@ export default function Cidade() {
             <Header />
                 <div className='container'>
                     <h1>Cadastro de Cidades</h1>
-                    <form>
+                    <form onSubmit={salvar}>
                         <input 
                             type='text'
                             placeholder='Nome da Cidade'
@@ -63,6 +100,7 @@ export default function Cidade() {
                         {idEdicao && (
                             <button
                                 type='button'
+                                onClick={limparFormulario}
                             >Cancelar
                             </button>
                         )}
@@ -86,7 +124,10 @@ export default function Cidade() {
                                     <td>{cidade.nome}</td>
                                     <td>{cidade.uf}</td>
                                     <td>
-                                        <button>Editar</button>
+                                        <button 
+                                            onClick={() => editar(cidade)}
+                                        >Editar
+                                        </button>
                                         <button>Excluir</button>
                                     </td>
                                 </tr>
