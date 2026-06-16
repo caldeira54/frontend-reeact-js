@@ -28,3 +28,12 @@ table {
         margin: 10px;
     }
 }
+
+.botoes {
+    margin-top: 20px;
+
+    input {
+        padding: 10px;
+        margin: 10px;
+    }
+}

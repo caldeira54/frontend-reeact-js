@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import './style.css';
 
@@ -12,6 +13,15 @@ export default function Cidade() {
     const [uf, setUf] = useState("");
     const [cidades, setCidades] = useState([]);
     const [idEdicao, setIdEdicao] = useState(null);
+    const navigate = useNavigate();
+
+    function navigateHome() {
+        return navigate("/");
+    }
+
+    function navigatePessoa() {
+        return navigate("/pessoa");
+    }
 
     const carregarCidades = async() => {
         try {
@@ -128,12 +138,28 @@ export default function Cidade() {
                                             onClick={() => editar(cidade)}
                                         >Editar
                                         </button>
-                                        <button>Excluir</button>
+                                        <button 
+                                            onClick={() => excluir(cidade.id)}
+                                        >Excluir
+                                        </button>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
+
+                    <div className='botoes'>
+                            <input 
+                                type='submit' 
+                                value='Home'
+                                onClick={navigateHome}
+                            />
+                            <input
+                                type='submit'
+                                value='Manutenção de Pessoas'
+                                onClick={navigatePessoa}
+                            />
+                    </div>
                 </div>
             <Footer />
         </>
